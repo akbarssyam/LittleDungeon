@@ -22,12 +22,6 @@ public class Player : MovingObject
         movement.x = (int)Input.GetAxisRaw("Horizontal");
         movement.y = (int)Input.GetAxisRaw("Vertical");
 
-        // For now no diagonal movement, so when x isn't 0 y is turned to 0
-        if (movement.x != 0)
-        {
-            movement.y = 0;
-        }
-
         // If Input isn't 0, attempt to move
         if (movement.sqrMagnitude > float.Epsilon)
         {
