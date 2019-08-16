@@ -34,7 +34,7 @@ public abstract class MovingObject : MonoBehaviour
 	{
 
 		//Store start position to move from, based on objects current transform position.
-		Vector2 start = (Vector2)transform.position;
+		Vector2 start = (Vector2)transform.position + boxCollider.offset;
 			
 		// Calculate end position based on the direction parameters passed in when calling Move.
 		Vector2 end = start + new Vector2 (xDir, yDir);
@@ -52,7 +52,7 @@ public abstract class MovingObject : MonoBehaviour
 		if(hit.transform == null && canMove)
 		{
 			//If nothing was hit, start SmoothMovement co-routine passing in the Vector2 end as destination
-			StartCoroutine (SmoothMovement (end));
+			StartCoroutine (SmoothMovement (end - boxCollider.offset));
 				
 			//Return true to say that Move was successful
 			return true;

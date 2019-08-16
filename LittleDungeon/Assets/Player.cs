@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Player : MovingObject
 {
+    public Animator animator;
+
+    Vector2 movement;
+
     protected override void Start()
     {
         base.Start();
@@ -15,27 +19,44 @@ public class Player : MovingObject
         // Return if it's not players turn
         if (!GameManager.instance.playersTurn) return;
 
-        int horizontal = (int) Input.GetAxisRaw("Horizontal");
-        int vertical = (int) Input.GetAxisRaw("Vertical");
+        movement.x = (int)Input.GetAxisRaw("Horizontal");
+        movement.y = (int)Input.GetAxisRaw("Vertical");
 
         // For now no diagonal movement, so when x isn't 0 y is turned to 0
-        if (horizontal != 0)
+        if (movement.x != 0)
         {
-            vertical = 0;
+            movement.y = 0;
         }
 
         // If Input isn't 0, attempt to move
-        if (horizontal != 0 || vertical != 0)
+        if (movement.sqrMagnitude > float.Epsilon)
         {
-            AttemptMove(horizontal, vertical);
+            AttemptMove((int)movement.x, (int)movement.y);
         }
+
+        PlayMovingAnimation();
     }
 
     protected override void AttemptMove(int xDir, int yDir)
     {
         base.AttemptMove(xDir, yDir);
 
+        PlayIdleAnimation();
+
         GameManager.instance.playersTurn = false;
+    }
+
+    private void PlayMovingAnimation()
+    {
+        animator.SetFloat("Horizontal", movement.x);
+        animator.SetFloat("Vertical", movement.y);
+        animator.SetFloat("Speed", movement.sqrMagnitude);
+    }
+
+    private void PlayIdleAnimation()
+    {
+        animator.SetFloat("IdleX", movement.x);
+        animator.SetFloat("IdleY", movement.y);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
