@@ -19,6 +19,15 @@ public class Player : MovingObject
         // Return if it's not players turn
         if (!GameManager.instance.playersTurn) return;
 
+        // Handling attack input
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            // Attack logic
+            Attack();
+            return;
+        }
+
+        // Handling player movement
         movement.x = (int)Input.GetAxisRaw("Horizontal");
         movement.y = (int)Input.GetAxisRaw("Vertical");
 
@@ -51,6 +60,13 @@ public class Player : MovingObject
     {
         animator.SetFloat("IdleX", movement.x);
         animator.SetFloat("IdleY", movement.y);
+    }
+
+    void Attack()
+    {
+        animator.SetTrigger("Attack");
+
+        GameManager.instance.playersTurn = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
