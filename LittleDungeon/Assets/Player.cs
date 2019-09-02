@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MovingObject
 {
     public Animator animator;
+    public int facingDirection = 0;
 
     Vector2 movement;
 
@@ -65,6 +66,10 @@ public class Player : MovingObject
     void Attack()
     {
         animator.SetTrigger("Attack");
+
+        // Play Floating number
+        Vector2 facingDirection = new Vector2(animator.GetFloat("IdleX"), animator.GetFloat("IdleY"));
+        FloatingDamageManager.Instance.CreateFloatingDamage("15", (Vector2)transform.position + facingDirection);
 
         GameManager.instance.playersTurn = false;
     }
